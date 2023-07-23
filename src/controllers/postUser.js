@@ -1,9 +1,9 @@
 const {User,Pedido}=require("../DB_connection")
 
  async function postUser(req,res) {
-    const {email,nombre,contraseña,confirmar,direccion}=req.query;
+    const {email,nombre,contraseña,confirmar,direccion,telefono}=req.query;
     try {
-        if([email,contraseña,confirmar,nombre,direccion].every(Boolean)){
+        if([email,contraseña,confirmar,nombre,direccion,telefono].every(Boolean)){
             if(contraseña!=confirmar){
                 res.status(400).json({message:"Las contraseñas no coinciden"})
             }
@@ -14,13 +14,15 @@ const {User,Pedido}=require("../DB_connection")
           nombre,
           contraseña,
           confirmar,
-          direccion
+          direccion,
+          telefono
           },include: [Pedido]
          });
 
         res.status(200).json({
             access: true,
-            id:userInstance[0].dataValues.id
+            id:userInstance[0].dataValues.id,
+            data:userInstance
         })
     }else{
         res.status(400).json({message:"Faltan datos"})}

@@ -29,6 +29,10 @@ module.exports = (sequelize) => {
       direccion:{
          type:DataTypes.STRING,
          allowNull:false
+      },
+      telefono:{
+         type:DataTypes.STRING,
+         allowNull:false
       }
    }, { timestamps: false });
 

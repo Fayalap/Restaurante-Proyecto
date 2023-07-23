@@ -2,7 +2,7 @@ const {Ingrediente}=require("../DB_connection")
 
  async function postIngrediente(req,res) {
     const {nombre}=req.body;
-    console.log(nombre)
+
     try {
         if([nombre].every(Boolean)){
             if(typeof (nombre) != 'string'){

@@ -1,26 +1,29 @@
-const {Favorite}=require("../DB_connection")
+const {Pedido}=require("../DB_connection")
+const {Precios}=require("../DB_connection")
 const {User}=require("../DB_connection")
 const {conn}=require("../DB_connection")
 async function postPedido(req,res) {
-    const {userID,name,direccion,pizzasID,telefono}=req.body;
+    const {userID,nombre,direccion,pizzasID,añadidos,telefono}=req.body;
     try {
-        if([name,direccion,pizzasID,telefono].every(Boolean)){
-        await Pedido.findOrCreate({
-        where: { id: userID },
+        if([nombre,direccion,pizzasID,telefono].every(Boolean)){
+
+        const PedidoCreado = await Pedido.create({
         defaults: {
-            id, name,image,species,gender
+            nombre_cliente:nombre,direccion_entrega:direccion,telefono_contacto:telefono,pizzas_id:pizzasID,
+            añadidos:añadidos
         },
 
       });
-       await conn.models.user_favorite.create({
+       await conn.models.Pedidos_User.create({
                 userId:userID,
-                favoriteId:id
+
+                pedidoId:PedidoCreado.pedidoId
              })
-     const favorite=await User.findByPk(userID,{
-        include: [Favorite],
+     const pedido=await User.findByPk(userID,{
+        include: [Pedido],
       });
       
-        res.status(201).json(favorite.Favorites)
+        res.status(201).json(pedido.Pedido)
 
     }else{
         res.status(400).json("Faltan datos")

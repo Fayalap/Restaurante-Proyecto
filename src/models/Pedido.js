@@ -20,13 +20,12 @@ module.exports =(sequelize)=>{
             type: DataTypes.STRING,
             allowNull: false
           },
-          imagen_url: {
-            type: DataTypes.STRING,
+          pizzas_id:{
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
             allowNull: false
           },
-          precio_total:{
-            type: DataTypes.FLOAT,
-            allowNull: false
+          añadidos:{
+            type: DataTypes.ARRAY(DataTypes.INTEGER)
           }
           
      },);

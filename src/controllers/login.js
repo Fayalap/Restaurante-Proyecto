@@ -7,13 +7,21 @@ async function login(req,res) {
             where:{email:email},
             include: [Pedido],
         })
+        const DATA={
+            nombre:instance.nombre,
+            email:instance.email,
+            direccion:instance.direccion,
+            telefono:instance.telefono,
+            id:instance.id
+        }
         if(instance==null){
            res.status(403).json({ message: "Usuario no encontrado" }) 
         }else{
            if(instance.contraseña==contraseña){
             res.status(200).json({
                 access: true,
-                id:instance.id
+                id:instance.id,
+                data:DATA
              })
         }else{
             res.status(403).json({ message: "Contraseña incorrecta" })
