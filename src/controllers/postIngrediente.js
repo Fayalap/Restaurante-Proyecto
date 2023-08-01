@@ -1,17 +1,18 @@
 const {Ingrediente}=require("../DB_connection")
 
  async function postIngrediente(req,res) {
-    const {nombre}=req.body;
+    const {nombre,precio}=req.body;
 
     try {
-        if([nombre].every(Boolean)){
+        if([nombre,precio].every(Boolean)){
             if(typeof (nombre) != 'string'){
                 res.status(400).json({message:"Debe ser un texto"})
             }
        const userInstance = await Ingrediente.findOrCreate({
         where: {  nombre_ingrediente: nombre },
         defaults: {
-            nombre_ingrediente:nombre
+            nombre_ingrediente:nombre,
+            precio:precio
           }
          });
 

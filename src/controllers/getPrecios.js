@@ -3,38 +3,40 @@ const {Precios}=require("../DB_connection")
 
 async function getPrecios(req,res) {
     let totalIngredientes=0;
-    let totalPizzas=0;
+    let totalPromos=0;
     try {
-        const {pizzasID,ingredientesID}=req.body
-        if(ingredientesID&&ingredientesID!=0){
-                const totalPreciosIngredientes=await Precios.findOne({
-                    attributes: [
-                        [literal(`SUM(precio)`), 'totalPrecios'],
-                    ],
-                     where:{ingredienteId:ingredientesID}
-                })
-                totalIngredientes = totalPreciosIngredientes.dataValues.totalPrecios.toFixed(3);
-        }
-                
-        if(pizzasID&&pizzasID!=0){
-                const totalPreciosPizzas=await Precios.findOne({
-                    attributes: [
-                        [literal(`SUM(precio)`), 'totalPrecios'],
-                        ],
-                    where:{PizzaId:pizzasID}
-                })
-                totalPizzas=totalPreciosPizzas.dataValues.totalPrecios.toFixed(3);
+        const {promosID,ingredientesID}=req.body
 
-        }
-       
-   
-        
-        
-        const total=(parseFloat(totalIngredientes)+parseFloat(totalPizzas)).toFixed(3)
-        
+            for (const promoId of promosID) {
+              if (promoId && promoId !== 0) {
+                const totalPreciosPromos = await Precios.findOne({
+                  attributes: [[literal(`SUM(precio)`), 'totalPrecios']],
+                  where: { PromoId: promoId },
+                });
+          
+                if (totalPreciosPromos.dataValues.totalPrecios) {
+                    totalPromos += totalPreciosPromos.dataValues.totalPrecios;
+                }
+              }
+            }
+          
+
+            for (const ingredienteID of ingredientesID) {
+                if (ingredienteID && ingredienteID !== 0) {
+                  const totalPreciosIngredientes = await Precios.findOne({
+                    attributes: [[literal(`SUM(precio)`), 'totalPrecios']],
+                    where: { ingredienteId: ingredienteID },
+                  });
+            
+                  if (totalPreciosIngredientes.dataValues.totalPrecios) {
+                    totalIngredientes += totalPreciosIngredientes.dataValues.totalPrecios;
+                  }
+                }
+              }
+        const total=(parseFloat(totalIngredientes)+parseFloat(totalPromos)).toFixed(3)
         res.status(200).json(total)
     } catch (error) {
-        res.status(500).json({message:error.message})
+        res.status(500).json({message:"hubo un error al solicitar el precio"})
 
     }
     

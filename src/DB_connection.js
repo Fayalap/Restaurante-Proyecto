@@ -2,7 +2,7 @@ require('dotenv').config();
 const Sequelize  = require('sequelize');
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 const UserModel=require("./models/User.js")
-const PizzaModel=require("./models/Pizza.js")
+const PromoModel=require("./models/Promo.js")
 const PizzaCreadaModel=require("./models/PizzaCreada.js")
 const IngredienteModel=require("./models/Ingrediente.js")
 const PedidoModel=require("./models/Pedido.js")
@@ -14,18 +14,18 @@ const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}
 //función de los modelos.
 PreciosModel(sequelize);
 UserModel(sequelize);
-PizzaModel(sequelize);
+PromoModel(sequelize);
 PizzaCreadaModel(sequelize);
 IngredienteModel(sequelize);
 PedidoModel(sequelize);
 //Relacion de Modelos
-const { User, Pizza , PizzaCreada,Ingrediente, Pedido ,Precios} = sequelize.models;
+const { User, Promo , PizzaCreada,Ingrediente, Pedido ,Precios} = sequelize.models;
 // Relación uno a uno entre Ingrediente y Precio
 Ingrediente.hasOne(Precios, { foreignKey: 'ingredienteId' });
-Precios.belongsTo(Ingrediente, { foreignKey: 'precioIdIngrediente' });
+Precios.belongsTo(Ingrediente, { foreignKey: 'ingredienteId' });
 
-Pizza.hasOne(Precios, { foreignKey: 'PizzaId' });
-Precios.belongsTo(Pizza, { foreignKey: 'precioId' });
+Promo.hasOne(Precios, { foreignKey: 'PromoId' });
+Precios.belongsTo(Promo, { foreignKey: 'PromoId' });
 
 User.belongsToMany(Pedido, { through: 'Pedidos_User', foreignKey: 'userId' });
 Pedido.belongsToMany(User, { through: 'Pedidos_User', foreignKey: 'pedidoId' });
@@ -36,15 +36,15 @@ Pedido.belongsToMany(Ingrediente, { through: 'Añadidos_User', foreignKey: 'pedi
 PizzaCreada.belongsToMany(Ingrediente, { through: 'Pizza_Creada_Usuario', foreignKey: 'creadaId' });
 Ingrediente.belongsToMany(PizzaCreada, { through: 'Pizza_Creada_Usuario', foreignKey: 'ingredienteId' });
 
-Pizza.belongsToMany(Pedido, { through: 'Pedidos_Pizza_Normales', foreignKey: 'pizzaId' });
-Pedido.belongsToMany(Pizza, { through: 'Pedidos_Pizza_Normales', foreignKey: 'pedidoPizzaId' });
+Promo.belongsToMany(Pedido, { through: 'Pedidos_Promo_Normales', foreignKey: 'promoId' });
+Pedido.belongsToMany(Promo, { through: 'Pedidos_Promo_Normales', foreignKey: 'pedidoPromoId' });
 
 PizzaCreada.belongsToMany(Pedido, { through: 'Pedidos_Pizza_Creada', foreignKey: 'pizzaCreadaId' });
 Pedido.belongsToMany(PizzaCreada, { through: 'Pedidos_Pizza_Creada', foreignKey: 'pedidoPizzaCreadaId' });
 
 module.exports = {
    User,
-   Pizza,
+   Promo,
    PizzaCreada,
    Ingrediente,
    Pedido,

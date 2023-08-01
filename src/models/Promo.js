@@ -2,13 +2,13 @@ const { DataTypes } = require('sequelize');
 
 
 module.exports =(sequelize)=>{
-    sequelize.define('Pizza', {
+    sequelize.define('Promo', {
         id:{
            type:DataTypes.INTEGER,
            primaryKey:true,
            autoIncrement: true
         },
-        nombre_pizza:{
+        nombre_promo:{
            type:DataTypes.STRING,
            allowNull:false
         },
@@ -20,6 +20,10 @@ module.exports =(sequelize)=>{
             type: DataTypes.STRING,
             allowNull: false
         },
+        precio:{
+         type: DataTypes.STRING,
+         allowNull: false
+     },
      }, { timestamps: false });
   };
   

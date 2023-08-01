@@ -1,14 +1,11 @@
-const {Ingrediente,Precios,Pizza}=require("../DB_connection")
+const {Ingrediente,Precios,Promo}=require("../DB_connection")
 
 
 
 async function postPrecio (req,res) {
 
         try {
-            const {ingredienteId,precio,pizzaId} = req.body;
-            console.log(ingredienteId)
-            console.log(precio.toFixed(3))
-
+            const {ingredienteId,precio,promoId} = req.body;
             if(ingredienteId){ 
                 const ingrediente = await Ingrediente.findByPk(ingredienteId); 
                 if(!ingrediente){
@@ -18,14 +15,14 @@ async function postPrecio (req,res) {
                 await ingrediente.setPrecio(nuevoPrecio)
                 console.log((await ingrediente.getPrecio()))
             }
-            if(pizzaId){ 
-                const pizza = await Pizza.findByPk(pizzaId); 
-                if(!pizza){
-                return res.status(404).json({message:"Pizza no encontrada"})
+            if(promoId){ 
+                const promo = await Promo.findByPk(promoId); 
+                if(!promo){
+                return res.status(404).json({message:"Promo no encontrada"})
                 }
                 const nuevoPrecio = await Precios.create({precio:precio.toFixed(3)})
-                await pizza.setPrecio(nuevoPrecio)
-                console.log((await pizza.getPrecio()))
+                await promo.setPrecio(nuevoPrecio)
+                console.log((await promo.getPrecio()))
 
             }
             
